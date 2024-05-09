@@ -2,7 +2,7 @@
   <h3>Deine Watchlist!</h3>
   <ul id="list" class="list">
     <li v-for="movie in movies":key="movie.id">
-      {{movie.name}} <span>min{{movie.length}}</span>
+      {{movie.name}} <span>{{movie.length}} min</span>
       <bu class="delete-btn">X</bu>
     </li>
   </ul>

@@ -5,6 +5,5 @@ import Header from "@/App.vue";
 
 <template>
   <main>
-    <Header/>
   </main>
 </template>

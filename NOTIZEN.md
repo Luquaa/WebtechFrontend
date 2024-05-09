@@ -11,3 +11,8 @@
 -
 ## Lukas Notizen:
 - 
+
+# Farbcode fürs Projekt
+- #303633
+- #8be8cb
+- #7ea2aa
