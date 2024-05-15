@@ -1,14 +1,34 @@
 <script setup>
 import Watchlist from "@/components/Watchlist.vue";
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const message = ref('')
 const name = ref('')
+const isEditing = ref(false) // Neue Variable für den Bearbeitungsstatus
+
+// Abrufen der gespeicherten Werte beim Laden der Seite
+onMounted(() => {
+  const savedName = localStorage.getItem('savedName');
+  const savedMessage = localStorage.getItem('savedMessage');
+
+  if (savedName) {
+    name.value = savedName;
+  }
+
+  if (savedMessage) {
+    message.value = savedMessage;
+  }
+});
 
 const save = () => {
-  // Speichern des Namens und der Nachricht im lokalen Speicher
+  console.log('save function called')
+  console.log(name.value, message.value)
   localStorage.setItem('savedName', name.value);
   localStorage.setItem('savedMessage', message.value);
+}
+
+const toggleEditing = () => {
+  isEditing.value = !isEditing.value
 }
 
 </script>
@@ -17,14 +37,15 @@ const save = () => {
     <div id="description">
       Name: {{ name }}
       <br>
-      <input v-model="name" placeholder="der Name deiner Liste" @keyup.enter="save()" />
+      <input v-if="isEditing" v-model="name" placeholder="der Name deiner Liste" @keyup.enter="save()" />
       <br>
       <span>Description:</span>
-      <p style="white-space: pre-line;">{{ savedMessage }}</p>
+      <p style="white-space: pre-line;">{{ message }}</p>
       <br>
-      <textarea v-model="message" placeholder="füge deine Beschreibung hinzu" @keyup.enter="save()"></textarea>
+      <textarea v-if="isEditing" v-model="message" placeholder="füge deine Beschreibung hinzu" @keyup.enter="save()"></textarea>
     </div>
   <button type="button" @click="save()">Save</button>
+  <button type="button" @click="toggleEditing()">Edit</button>
 
   <Watchlist movies="movie"/>
 </template>
