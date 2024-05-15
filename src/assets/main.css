@@ -30,6 +30,11 @@ h1 {
   letter-spacing: 1px;
   margin: 0;
 }
+h2 {
+  border-bottom: 1px solid #bbb;
+  margin: 0;
+
+}
 
 h3 {
   border-bottom: 1px solid #bbb;

@@ -28,15 +28,18 @@ h1, h2, p {
 
 h1 {
   font-size: 36px;
+  color: #333;
 }
 
 h2 {
   font-size: 24px;
+  color: #333;
 }
 
 p {
   font-size: 18px;
   line-height: 1.5;
+  color: #666;
 }
 </style>
 

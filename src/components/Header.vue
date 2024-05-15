@@ -20,7 +20,7 @@
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-
+import Watchlist from "@/components/Watchlist.vue";
 </script>
 
 /*
