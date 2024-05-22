@@ -5,9 +5,15 @@
     </div>
     <div class="header-center">
       <nav>
-        <button class="button"><RouterLink to="/">Home</RouterLink></button>
-        <button class="button"><RouterLink to="/about">About</RouterLink></button>
-        <button class="button"><RouterLink to="/watchlist">Watchlist</RouterLink></button>
+        <button class="button">
+          <RouterLink to="/">Home</RouterLink>
+        </button>
+        <button class="button">
+          <RouterLink to="/about">About</RouterLink>
+        </button>
+        <button class="button">
+          <RouterLink to="/watchlist">Watchlist</RouterLink>
+        </button>
       </nav>
       <!-- Fügen Sie hier weitere Links zu anderen Views hinzu -->
     </div>
@@ -20,7 +26,7 @@
 
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import Watchlist from "@/components/Watchlist.vue";
+import Watchlist from '@/components/Watchlist.vue'
 </script>
 
 /*
@@ -42,9 +48,18 @@ const searchQuery = ref('');
   z-index: 999; /* Stellt sicher, dass der Header über dem restlichen Inhalt liegt */
 }
 
-.header-left,
+.header-left {
+  flex: 1;
+}
+
 .header-right {
   flex: 1;
+}
+
+.header-right input {
+  background-color: #8be8cb;
+  border-color: #8be8cb;
+  padding: 10px;
 }
 
 .header-center {
@@ -59,11 +74,18 @@ const searchQuery = ref('');
   margin: 0 10px;
 }
 
-.button{
+.button {
   margin-right: 5px;
   background-color: #8be8cb;
   text-align: center;
   color: #303633;
   font-size: 30px;
+  border-color: #8be8cb;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.button a {
+  text-decoration: none;
 }
 </style>
