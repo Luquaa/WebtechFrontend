@@ -1,0 +1,1 @@
+export type WatchlistEntry = { id?: number, name: string, length: number }
