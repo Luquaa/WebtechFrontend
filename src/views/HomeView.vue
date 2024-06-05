@@ -14,7 +14,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { fetchMovies } from './apiService';
+import { fetchMovies } from '../services/apiService';
 
 const movies = ref([]);
 const loading = ref(false);
