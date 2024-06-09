@@ -4,6 +4,8 @@ import axios from 'axios';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
+console.log('API key:', import.meta.env.VITE_API_KEY);
+
 const HEADERS = {
   accept: 'application/json',
   Authorization: `import.meta.env.VITE_API_KEY`,
