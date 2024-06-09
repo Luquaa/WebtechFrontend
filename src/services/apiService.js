@@ -1,44 +1,37 @@
 // src/services/apiService.js
 import axios from 'axios';
 
-// Create the axios instance using the base URL and headers from environment variables
-const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${import.meta.env.VITE_API_KEY}`, // Use the API key from environment variable
-  }
-});
+const BASE_URL = 'https://api.themoviedb.org/3';
+const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
-// Function to fetch movies
+const HEADERS = {
+  accept: 'application/json',
+  Authorization: `import.meta.env.VITE_API_KEY`,
+};
+
 export const fetchMovies = async () => {
-  const options = {
-    method: 'GET',
-    url: '/discover/movie', // Use relative URL with apiClient baseURL
-    params: {
-      include_adult: false,
-      include_video: false,
-      language: 'en-US',
-      page: 1,
-      sort_by: 'popularity.desc',
-    },
-    headers: {
-      accept: 'application/json',
-    },
-  };
-
+  const url = `${BASE_URL}/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`;
   try {
-    const response = await apiClient.request(options);
-    return response.data;
+    const response = await axios.get(url, { headers: HEADERS });
+    return response.data.results;
   } catch (error) {
     console.error('Error fetching movies:', error);
     throw error;
   }
 };
 
-// Usage example
-fetchMovies().then(data => {
-  console.log(data);
-}).catch(error => {
-  console.error(error);
-});
+export const fetchImages = async () => {
+  try {
+    const movies = await fetchMovies();
+    const images = movies.map(movie => ({
+      id: movie.id,
+      title: movie.title,
+      imageUrl: `${IMAGE_BASE_URL}${movie.poster_path}`,
+      description: movie.overview, // Ensure this key exists in the API response
+    }));
+    return images;
+  } catch (error) {
+    console.error('Error fetching images:', error);
+    throw error;
+  }
+};
