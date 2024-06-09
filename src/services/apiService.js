@@ -6,7 +6,7 @@ const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
 const HEADERS = {
   accept: 'application/json',
-  Authorization: `import.meta.env.VITE_API_KEY`,
+  Authorization: `Bearer${import.meta.env.VITE_API_KEY}`,
 };
 
 export const fetchMovies = async () => {
