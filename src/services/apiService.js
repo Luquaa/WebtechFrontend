@@ -1,20 +1,12 @@
-// src/services/apiService.js
 import axios from 'axios';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
-console.log('API key:', import.meta.env.VITE_API_KEY);
-
-const HEADERS = {
-  accept: 'application/json',
-  Authorization: `import.meta.env.VITE_API_KEY`,
-};
-
 export const fetchMovies = async () => {
-  const url = `${BASE_URL}/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`;
+  const url = `${BASE_URL}/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=${import.meta.env.VITE_API_KEY}`;
   try {
-    const response = await axios.get(url, { headers: HEADERS });
+    const response = await axios.get(url);
     return response.data.results;
   } catch (error) {
     console.error('Error fetching movies:', error);
