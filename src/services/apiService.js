@@ -29,3 +29,14 @@ export const fetchImages = async () => {
     throw error;
   }
 };
+
+export const showMovies = async (filmId) => {
+  const url = `${BASE_URL}/movie/${filmId}?api_key=${import.meta.env.VITE_API_KEY}`;
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching movie:', error);
+    throw error;
+  }
+};

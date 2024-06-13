@@ -1,12 +1,11 @@
 <script setup>
 import Watchlist from "@/components/Watchlist.vue";
 import {ref, onMounted} from 'vue'
-import axios from "axios";
+
 
 const message = ref('')
 const name = ref('')
 const isEditing = ref(false) // Neue Variable für den Bearbeitungsstatus
-const watchlist = ref([]); // Neue Referenz für die Watchlist-Daten
 
 // Abrufen der gespeicherten Werte beim Laden der Seite
 onMounted(async () => {
@@ -20,13 +19,6 @@ onMounted(async () => {
 
   if (savedMessage) {
     message.value = savedMessage;
-  }
-
-  try {
-    const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist`);
-    watchlist.value = response.data;
-  } catch (error) {
-    console.log(error);
   }
 });
 
@@ -58,7 +50,7 @@ const toggleEditing = () => {
   <button type="button" @click="save()">Save</button>
   <button type="button" @click="toggleEditing()">Edit</button>
 
-  <Watchlist :movies="watchlist"/>
+  <Watchlist/>
 </template>
 
 <style scoped>
