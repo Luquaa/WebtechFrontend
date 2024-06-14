@@ -21,7 +21,7 @@ export const fetchImages = async () => {
       id: movie.id,
       title: movie.title,
       imageUrl: `${IMAGE_BASE_URL}${movie.poster_path}`,
-      description: movie.overview, // Ensure this key exists in the API response
+      description: movie.overview,
     }));
     return images;
   } catch (error) {
