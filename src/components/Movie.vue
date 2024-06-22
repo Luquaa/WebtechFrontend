@@ -11,18 +11,28 @@
         <button class="add-button" @click="addToWatchlist(movie)">Hinzufügen</button>
       </div>
     </div>
+    <NotificationPopup
+      :type="notificationType"
+      :message="notificationMessage"
+      v-if="showNotification"
+    />
   </div>
 </template>
 
 <script setup>
-import {ref, onMounted} from 'vue';
-import {fetchImages} from '../services/apiService';
+import { ref, onMounted } from 'vue';
+import { fetchImages } from '../services/apiService';
 import axios from 'axios';
+import NotificationPopup from '@/components/NotificationPopup.vue';
 
 const movies = ref([]);
 const loading = ref(false);
 const error = ref(null);
 const watchlist = ref([]);
+
+const notificationMessage = ref('');
+const notificationType = ref('success');
+const showNotification = ref(false);
 
 const showMovies = async () => {
   loading.value = true;
@@ -36,27 +46,41 @@ const showMovies = async () => {
   }
 };
 
-const addToWatchlist = async (movie) => { // Fügen Sie das async Schlüsselwort hinzu
+const addToWatchlist = async (movie) => {
+  if (watchlist.value.some(m => m.id === movie.id)) {
+    showNotificationMessage('This movie already exists in the watchlist', 'error');
+    return;
+  }
+
   watchlist.value.push(movie);
 
   const movieToSave = {
-    filmId: movie.id, // Hinzufügen der filmId
+    filmId: movie.id,
     titel: movie.title,
   };
 
   try {
     await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist`, movieToSave);
+    showNotificationMessage('Movie added to watchlist', 'success');
   } catch (err) {
     console.error('Failed to add movie to watchlist:', err);
+    showNotificationMessage('Error adding movie to watchlist', 'error');
   }
 };
 
+const showNotificationMessage = (message, type) => {
+  notificationMessage.value = message;
+  notificationType.value = type;
+  showNotification.value = true;
+  setTimeout(() => {
+    showNotification.value = false;
+  }, 3000);
+};
 
 onMounted(() => {
   showMovies();
 });
 </script>
-
 
 <style scoped>
 .movies-container {
@@ -65,13 +89,13 @@ onMounted(() => {
 }
 
 .movie-box {
-  position: relative; /* Hinzugefügt */
+  position: relative; /* Added */
   margin: 10px;
   padding: 10px;
   border: 1px solid #ccc;
   width: 200px;
   text-align: center;
-  padding-bottom: 50px; /* Hinzugefügt */
+  padding-bottom: 50px; /* Added */
 }
 
 .movie-box img {
@@ -90,9 +114,9 @@ onMounted(() => {
 }
 
 .add-button {
-  position: absolute; /* Hinzugefügt */
-  bottom: 5px; /* Hinzugefügt */
-  left: 50%; /* Hinzugefügt */
+  position: absolute; /* Added */
+  bottom: 5px; /* Added */
+  left: 50%; /* Added */
   transform: translateX(-50%);
   background-color: #8be8cb;
   border: none;
