@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, provide } from 'vue';
 import Movie from "@/components/Movie.vue";
 import NotificationPopup from '@/components/NotificationPopup.vue';
 

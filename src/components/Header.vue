@@ -29,9 +29,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import Watchlist from '@/components/Watchlist.vue'
 </script>
 
-/*
-const searchQuery = ref('');
-*/
+<!-- const searchQuery = ref('') -->
 
 <style scoped>
 .header {
