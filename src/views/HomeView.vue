@@ -1,10 +1,6 @@
 <template>
   <div>
     <Movie/>
-    <NotificationPopup
-      :type="notificationType"
-      :message="notificationMessage"
-      v-if="showNotification"
     />
   </div>
 </template>
@@ -12,7 +8,6 @@
 <script setup>
 import { ref, provide } from 'vue';
 import Movie from "@/components/Movie.vue";
-import NotificationPopup from '@/components/NotificationPopup.vue';
 
 const notificationMessage = ref(null);
 const notificationType = ref('success');

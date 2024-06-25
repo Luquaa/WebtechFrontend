@@ -52,23 +52,26 @@ const addToWatchlist = async (movie) => {
     titel: movie.title,
   };
 
-  try {
-    const response = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist`, movieToSave);
+  // Display a confirmation box when the "Hinzufügen" button is clicked
+  if (window.confirm('Do you want to add this movie to your watchlist?')) {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist`, movieToSave);
 
-    if (response.status === 200) {
-      watchlist.value.push(movie);
-      console.log('Adding movie to watchlist');
-      showNotificationPopup('Movie added to watchlist', 'success');
-    } else if (response.status === 409) {
-      console.log('Movie already in watchlist');
-      showNotificationPopup('Movie already in watchlist', 'error');
+      // Check the HTTP response
+      if (response.status === 200) {
+        watchlist.value.push(movie);
+        console.log('Adding movie to watchlist');
+        showNotificationPopup('Movie added to watchlist', 'success');
+      } else if (response.status === 409) {
+        console.log('Movie already in watchlist');
+        showNotificationPopup('Movie already in watchlist', 'error');
+      }
+    } catch (error) {
+      error.value = 'Failed to add movie to watchlist' + error.message
+      showNotificationPopup('Failed to add movie to watchlist', 'error');
     }
-  } catch (error) {
-    error.value = 'Failed to add movie to watchlist' + error.message
-    showNotificationPopup('Failed to add movie to watchlist', 'error');
   }
 };
-
 const showNotificationPopup = (message, type) => {
   notificationMessage.value = message;
   notificationType.value = type;
