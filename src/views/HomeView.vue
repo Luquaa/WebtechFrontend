@@ -1,6 +1,11 @@
 <template>
   <div>
     <Movie/>
+    <NotificationPopup
+      :type="notificationType"
+      :message="notificationMessage"
+      v-if="showNotification"
+    />
   </div>
 </template>
 
