@@ -8,7 +8,7 @@
         <img :src="movie.imageUrl" :alt="movie.title" />
         <h2>{{ movie.title }}</h2>
         <p>{{ movie.description }}</p>
-        <button class="add-button" @click="addToWatchlist(movie)">Hinzufügen</button>
+        <button class="add-button" @click="addToWatchlistHandler(movie)">Hinzufügen</button>
       </div>
     </div>
     <NotificationPopup
