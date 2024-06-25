@@ -40,3 +40,14 @@ export const showMovies = async (filmId) => {
     throw error;
   }
 };
+
+export const searchMovies = async () => {
+  const url = `${BASE_URL}/search/movie?<query>&api_key=${import.meta.env.VITE_API_KEY}`;
+  try {
+    const response = await axios.get(url);
+    return response.data.results;
+  } catch (error) {
+    console.error('Error searching movies:', error);
+    throw error;
+  }
+}

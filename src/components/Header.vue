@@ -18,18 +18,24 @@
       <!-- Fügen Sie hier weitere Links zu anderen Views hinzu -->
     </div>
     <div class="header-right">
-      <input type="text" placeholder="Search Movies..." v-model="searchQuery">
-      <!-- Hier können Sie die Suchfunktionalität implementieren -->
+      <input type="text" placeholder="Search Movies..." v-model="searchQuery" @keyup.enter="handleSearch">
     </div>
   </header>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
-import Watchlist from '@/components/Watchlist.vue'
-</script>
 
-<!-- const searchQuery = ref('') -->
+const searchQuery = ref('')
+const router = useRouter()
+
+const handleSearch = () => {
+  if (searchQuery.value.trim()) {
+    router.push({ name: 'searchResults', query: { query: searchQuery.value } })
+  }
+}
+</script>
 
 <style scoped>
 .header {
