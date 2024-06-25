@@ -57,8 +57,10 @@ const addToWatchlist = async (movie) => {
 
     if (response.status === 200) {
       watchlist.value.push(movie);
+      console.log('Adding movie to watchlist');
       showNotificationPopup('Movie added to watchlist', 'success');
     } else if (response.status === 409) {
+      console.log('Movie already in watchlist');
       showNotificationPopup('Movie already in watchlist', 'error');
     }
   } catch (error) {

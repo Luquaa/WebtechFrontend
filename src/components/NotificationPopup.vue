@@ -34,6 +34,7 @@ export default {
   },
   methods: {
     show() {
+      console.log('showing notification', this.message, this.type);
       this.visible = true;
       setTimeout(() => {
         this.visible = false;
