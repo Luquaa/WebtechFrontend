@@ -36,6 +36,7 @@ export default {
     show() {
       console.log('showing notification', this.message, this.type)
       this.visible = true
+      console.log('visible', this.visible)
       setTimeout(() => {
         this.visible = false
       }, this.duration)
@@ -60,6 +61,7 @@ const show = () => {
   border-radius: 5px;
   color: white;
   z-index: 1000;
+  border: 1px solid black;
 }
 
 .success {
