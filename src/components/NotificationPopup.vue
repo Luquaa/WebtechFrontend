@@ -23,25 +23,32 @@ export default {
   data() {
     return {
       visible: false
-    };
+    }
   },
   watch: {
     message(newVal) {
       if (newVal) {
-        this.show();
+        this.show()
       }
     }
   },
   methods: {
     show() {
-      console.log('showing notification', this.message, this.type);
-      this.visible = true;
+      console.log('showing notification', this.message, this.type)
+      this.visible = true
       setTimeout(() => {
-        this.visible = false;
-      }, this.duration);
+        this.visible = false
+      }, this.duration)
     }
   }
-};
+}
+const show = () => {
+  visible.value = true
+  setTimeout(() => {
+    visible.value = false
+  }, 3000)
+}
+
 </script>
 
 <style scoped>
@@ -54,9 +61,11 @@ export default {
   color: white;
   z-index: 1000;
 }
+
 .success {
   background-color: green;
 }
+
 .error {
   background-color: red;
 }

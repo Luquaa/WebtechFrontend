@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { fetchImages } from '../services/apiService';
 import axios from 'axios';
 import NotificationPopup from '@/components/NotificationPopup.vue';
@@ -77,6 +77,12 @@ const showNotificationPopup = (message, type) => {
     showNotification.value = false;
   }, 3000);
 };
+
+watch (showNotification, (newVal, oldVal) => {
+  if (newVal) {
+    NotificationPopup.methods.show();
+  }
+});
 
 onMounted(() => {
   showMovies();
