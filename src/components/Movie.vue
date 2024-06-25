@@ -62,7 +62,7 @@ const addToWatchlist = async (movie) => {
       showNotificationMessage('Movie already in watchlist', 'error');
     }
   } catch (error) {
-    eroor.value = 'Failed to add movie to watchlist' + error.message
+    error.value = 'Failed to add movie to watchlist' + error.message
     showNotificationMessage('Failed to add movie to watchlist', 'error');
   }
 };
