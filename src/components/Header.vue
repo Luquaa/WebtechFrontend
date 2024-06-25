@@ -24,17 +24,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const searchQuery = ref('')
-const router = useRouter()
+const searchQuery = ref('');
+const router = useRouter();
 
 const handleSearch = () => {
   if (searchQuery.value.trim()) {
-    router.push({ name: 'searchResults', query: { query: searchQuery.value } })
+    router.push({ name: 'searchResults', query: { query: searchQuery.value } });
   }
-}
+};
 </script>
 
 <style scoped>
