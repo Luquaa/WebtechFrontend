@@ -57,17 +57,17 @@ const addToWatchlist = async (movie) => {
 
     if (response.status === 200) {
       watchlist.value.push(movie);
-      showNotificationMessage('Movie added to watchlist', 'success');
+      showNotificationPopup('Movie added to watchlist', 'success');
     } else if (response.status === 409) {
-      showNotificationMessage('Movie already in watchlist', 'error');
+      showNotificationPopup('Movie already in watchlist', 'error');
     }
   } catch (error) {
     error.value = 'Failed to add movie to watchlist' + error.message
-    showNotificationMessage('Failed to add movie to watchlist', 'error');
+    showNotificationPopup('Failed to add movie to watchlist', 'error');
   }
 };
 
-const showNotificationMessage = (message, type) => {
+const showNotificationPopup = (message, type) => {
   notificationMessage.value = message;
   notificationType.value = type;
   showNotification.value = true;
