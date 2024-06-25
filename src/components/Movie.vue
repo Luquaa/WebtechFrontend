@@ -24,7 +24,7 @@ import { ref, onMounted, watch } from 'vue';
 import { fetchImages } from '../services/apiService';
 import axios from 'axios';
 import NotificationPopup from '@/components/NotificationPopup.vue';
-import { PopupWrapper } from 'vue';
+import PopupWrapper from '@/components/PopupWrapper.vue';
 
 const confirmPopup = new PopupWrapper();
 const movies = ref([]);
