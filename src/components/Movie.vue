@@ -47,24 +47,23 @@ const showMovies = async () => {
 };
 
 const addToWatchlist = async (movie) => {
-  if (watchlist.value.some(m => m.id === movie.id)) {
-    showNotificationMessage('This movie already exists in the watchlist', 'error');
-    return;
-  }
-
-  watchlist.value.push(movie);
-
   const movieToSave = {
     filmId: movie.id,
     titel: movie.title,
   };
 
   try {
-    await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist`, movieToSave);
-    showNotificationMessage('Movie added to watchlist', 'success');
-  } catch (err) {
-    console.error('Failed to add movie to watchlist:', err);
-    showNotificationMessage('Error adding movie to watchlist', 'error');
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist`, movieToSave);
+
+    if (response.status === 200) {
+      watchlist.value.push(movie);
+      showNotificationMessage('Movie added to watchlist', 'success');
+    } else if (response.status === 409) {
+      showNotificationMessage('Movie already in watchlist', 'error');
+    }
+  } catch (error) {
+    eroor.value = 'Failed to add movie to watchlist' + error.message
+    showNotificationMessage('Failed to add movie to watchlist', 'error');
   }
 };
 
