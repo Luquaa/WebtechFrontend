@@ -11,19 +11,13 @@
         <button class="add-button" @click="addToWatchlist(movie)">Hinzufügen</button>
       </div>
     </div>
-    <NotificationPopup
-      :type="notificationType"
-      :message="notificationMessage"
-      v-if="showNotification"
-    />
-  </div>
+    </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { fetchImages } from '../services/apiService';
-import axios  from 'axios';
-import NotificationPopup from '@/components/NotificationPopup.vue';
+import { ref, onMounted, watch } from 'vue'
+import { fetchImages } from '../services/apiService'
+import axios from 'axios'
 
 const movies = ref([])
 const loading = ref(false)
@@ -46,39 +40,17 @@ const showMovies = async () => {
   }
 }
 const addToWatchlist = async (movie) => {
+  watchlist.value.push(movie)
   const movieToSave = {
     filmId: movie.id,
     titel: movie.title
   }
   try {
-    const response = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist`, movieToSave)
-    // Check the HTTP response
-    if (response.status === 200) {
-      watchlist.value.push(movie)
-      console.log('Adding movie to watchlist')
-      showNotificationPopup('Movie added to watchlist', 'success')
-    } else if (response.status === 409) {
-      console.log('Movie already in watchlist')
-      showNotificationPopup('Movie already in watchlist', 'error')
-    }
-  } catch (error) {
-    error.value = 'Failed to add movie to watchlist' + error.message
-    showNotificationPopup('Failed to add movie to watchlist', 'error')
+    await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist`, movieToSave)
+  } catch (err) {
+    console.error('Failed to add movie to watchlist:', err)
   }
 }
-const showNotificationPopup = (message, type) => {
-  notificationMessage.value = message
-  notificationType.value = type
-  showNotification.value = true
-  setTimeout(() => {
-    showNotification.value = false
-  }, 3000)
-}
-watch(showNotification, (newVal, oldVal) => {
-  if (newVal) {
-    NotificationPopup.methods.show()
-  }
-})
 
 onMounted(() => {
   showMovies()
