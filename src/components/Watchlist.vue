@@ -1,21 +1,32 @@
 <template>
-  <h3>Deine Watchlist!</h3>
+  <h2>Deine Watchlist!</h2>
   <div class="movies-container">
-    <div class="movie-box" v-for="movie in watchlist" :key="movie.filmId">
+    <div class="movie-box" v-for="movie in unwatchedMovies" :key="movie.filmId">
       <h2>{{ movie.title }}</h2>
       <img :src="movie.poster_path" alt="Movie poster">
       <p>{{ movie.overview }}</p>
-      <button class="remove-button" @click="removeFromWatchlist(movie)">Entfernen</button> <!-- Button innerhalb der movie-box div -->
+      <input type="checkbox" class="watched-checkbox" @change="markAsWatched(movie)">
+      <button class="remove-button" @click="removeFromWatchlist(movie)">Entfernen</button>
+    </div>
+  </div>
+  <h2 v-if="watchedMovies.length">Bereits angeschaut:</h2>
+  <div class="movies-container" v-if="watchedMovies.length"> <!-- Hier wurde die Klasse hinzugefügt -->
+    <div class="movie-box" v-for="movie in watchedMovies" :key="movie.id">
+      <h2>{{ movie.titel }}</h2>
+      <img :src="`${IMAGE_BASE_URL}${movie.poster_path}`" alt="Movie poster">
+      <p>{{ movie.overview }}</p>
+      <input type="checkbox" class="watched-checkbox" :checked="isMovieWatched(movie)" @change="toggleWatched(movie)">
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref, onMounted} from 'vue'
+import {ref, onMounted, computed} from 'vue'
 import axios from "axios";
 import { showMovies } from "@/services/apiService.js";
 
-const watchlist = ref([]); // Neue Referenz für die Watchlist-Daten
+const watchlist = ref([]);
+const watchedMovies = ref([]);
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
 // Abrufen der Watchlist-Daten beim Laden der Seite
@@ -32,7 +43,13 @@ onMounted(async () => {
   } catch (error) {
     console.log(error);
   }
+
+  const watchedMoviesFromStorage = localStorage.getItem('watchedMovies');
+  if (watchedMoviesFromStorage) {
+    watchedMovies.value = JSON.parse(watchedMoviesFromStorage);
+  }
 });
+
 
 const removeFromWatchlist = async (movie) => {
   const index = watchlist.value.indexOf(movie);
@@ -47,19 +64,55 @@ const removeFromWatchlist = async (movie) => {
     }
   }
 };
+
+const markAsWatched = (movie) => {
+  watchedMovies.value.push(movie);
+  watchlist.value = watchlist.value.filter(m => m.filmId !== movie.filmId);
+
+  localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies.value));
+};
+
+const isMovieWatched = (movie) => {
+  return watchedMovies.value.some(watchedMovie => watchedMovie.filmId === movie.filmId);
+};
+
+const unwatchedMovies = computed(() => {
+  return watchlist.value.filter(movie => !isMovieWatched(movie));
+});
+
+const toggleWatched = (movie) => {
+  if (isMovieWatched(movie)) {
+    removeFromWatched(movie);
+  } else {
+    markAsWatched(movie);
+  }
+};
+
+const removeFromWatched = (movie) => {
+  const index = watchedMovies.value.findIndex(watchedMovie => watchedMovie.filmId === movie.filmId);
+  if (index !== -1) {
+    watchedMovies.value.splice(index, 1);
+    // Überprüfen Sie, ob der Film bereits in der Watchlist ist, bevor Sie ihn hinzufügen
+    if (!watchlist.value.some(w => w.filmId === movie.filmId)) {
+      watchlist.value.push(movie);
+    }
+    localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies.value));
+  }
+};
 </script>
 
 
 <style scoped>
 .movies-container {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
 }
 
 .movie-box {
   position: relative;
   margin: 10px;
-  padding: 10px;
+  padding-top: 10px;
   border: 1px solid #ccc;
   width: 200px;
   text-align: center;
@@ -96,5 +149,15 @@ const removeFromWatchlist = async (movie) => {
   font-size: 20px;
   margin: 4px 2px;
   cursor: pointer;
+}
+
+.watched-checkbox {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+h2 {
+  margin-top: 20px;
 }
 </style>

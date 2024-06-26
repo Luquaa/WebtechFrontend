@@ -50,6 +50,10 @@ const toggleEditing = () => {
   <button type="button" @click="save()">Save</button>
   <button type="button" @click="toggleEditing()">Edit</button>
 
+  <h3>Hinweis:</h3>
+  <p>In der oberen rechten Ecke der Movieboxen ist eine Checkbox,</p>
+  <p>mit der du den Film als gesehen markieren kannst.</p>
+
   <Watchlist/>
 </template>
 
