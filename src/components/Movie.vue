@@ -11,11 +11,11 @@
         <button class="add-button" @click="addToWatchlist(movie)">Hinzufügen</button>
       </div>
     </div>
-    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { fetchImages } from '../services/apiService'
 import axios from 'axios'
 
@@ -24,9 +24,6 @@ const loading = ref(false)
 const error = ref(null)
 const watchlist = ref([])
 
-const notificationMessage = ref('')
-const notificationType = ref('success')
-const showNotification = ref(false)
 
 const showMovies = async () => {
   loading.value = true
