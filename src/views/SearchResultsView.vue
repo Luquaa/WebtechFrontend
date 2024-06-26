@@ -15,10 +15,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { searchMovies } from '@/services/apiService.js'
-import { addToWatchlist } from '@/services/watchlistService.js'
 
 const route = useRoute()
 const movies = ref([])
@@ -42,7 +41,7 @@ const fetchSearchResults = async () => {
   }
 }
 
-const addToWatchlistHandler = async (movie) => {
+const addToWatchlist = async (movie) => {
   const result = await addToWatchlist(movie)
   notificationMessage.value = result.message
   notificationType.value = result.success ? 'success' : 'error'

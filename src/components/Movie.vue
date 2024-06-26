@@ -8,7 +8,7 @@
         <img :src="movie.imageUrl" :alt="movie.title" />
         <h2>{{ movie.title }}</h2>
         <p>{{ movie.description }}</p>
-        <button class="add-button" @click="addToWatchlistHandler(movie)">Hinzufügen</button>
+        <button class="add-button" @click="addToWatchlist(movie)">Hinzufügen</button>
       </div>
     </div>
     <NotificationPopup
@@ -22,7 +22,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { fetchImages } from '../services/apiService';
-import {addToWatchlist} from '@/services/watchlistService.js';
+import axios  from 'axios';
 import NotificationPopup from '@/components/NotificationPopup.vue';
 
 const movies = ref([])
@@ -45,21 +45,40 @@ const showMovies = async () => {
     loading.value = false
   }
 }
-
-const addToWatchlistHandler = async (movie) => {
-  const result = await addToWatchlist(movie);
-  notificationMessage.value = result.message;
-  notificationType.value = result.success ? 'success' : 'error';
-  showNotification.value = true;
-
-  if (result.success) {
-    watchlist.value.push(movie);
+const addToWatchlist = async (movie) => {
+  const movieToSave = {
+    filmId: movie.id,
+    titel: movie.title
   }
-
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist`, movieToSave)
+    // Check the HTTP response
+    if (response.status === 200) {
+      watchlist.value.push(movie)
+      console.log('Adding movie to watchlist')
+      showNotificationPopup('Movie added to watchlist', 'success')
+    } else if (response.status === 409) {
+      console.log('Movie already in watchlist')
+      showNotificationPopup('Movie already in watchlist', 'error')
+    }
+  } catch (error) {
+    error.value = 'Failed to add movie to watchlist' + error.message
+    showNotificationPopup('Failed to add movie to watchlist', 'error')
+  }
+}
+const showNotificationPopup = (message, type) => {
+  notificationMessage.value = message
+  notificationType.value = type
+  showNotification.value = true
   setTimeout(() => {
-    showNotification.value = false;
-  }, 3000);
-};
+    showNotification.value = false
+  }, 3000)
+}
+watch(showNotification, (newVal, oldVal) => {
+  if (newVal) {
+    NotificationPopup.methods.show()
+  }
+})
 
 onMounted(() => {
   showMovies()
