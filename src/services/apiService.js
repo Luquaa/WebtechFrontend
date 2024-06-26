@@ -41,8 +41,8 @@ export const showMovies = async (filmId) => {
   }
 };
 
-export const searchMovies = async () => {
-  const url = `${BASE_URL}/search/movie?<query>&api_key=${import.meta.env.VITE_API_KEY}`;
+export const searchMovies = async (query) => {
+  const url = `${BASE_URL}/search/movie?query=${query}&api_key=${import.meta.env.VITE_API_KEY}`;
   try {
     const response = await axios.get(url);
     return response.data.results;

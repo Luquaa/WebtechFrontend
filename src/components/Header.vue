@@ -15,13 +15,10 @@
           <RouterLink to="/watchlist">Watchlist</RouterLink>
         </button>
       </nav>
-      <!-- Fügen Sie hier weitere Links zu anderen Views hinzu -->
-    </div>
-    <div class="header-right">
-      <input type="text" placeholder="Search Movies..." v-model="searchQuery" @keyup.enter="handleSearch">
     </div>
   </header>
 </template>
+
 
 <script setup>
 import { ref } from 'vue';
@@ -49,33 +46,18 @@ const handleSearch = () => {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 999; /* Stellt sicher, dass der Header über dem restlichen Inhalt liegt */
+  z-index: 999;
 }
 
 .header-left {
   flex: 1;
 }
 
-.header-right {
-  flex: 1;
-}
-
-.header-right input {
-  background-color: #8be8cb;
-  border-color: #8be8cb;
-  padding: 10px;
-}
-
 .header-center {
   flex: 2;
   display: flex;
   justify-content: center;
-}
-
-.router-link {
-  color: #fff;
-  text-decoration: none;
-  margin: 0 10px;
+  margin-right: 25%;
 }
 
 .button {
