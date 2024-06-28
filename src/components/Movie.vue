@@ -9,6 +9,7 @@
         <h2>{{ movie.title }}</h2>
         <p>{{ movie.description }}</p>
         <button class="add-button" @click="addToWatchlist(movie)">Hinzufügen</button>
+        <p v-if="showMessage" class="message">Hinzugefügt!</p>
       </div>
     </div>
   </div>
@@ -23,7 +24,7 @@ const movies = ref([])
 const loading = ref(false)
 const error = ref(null)
 const watchlist = ref([])
-
+const showMessage = ref(false);
 
 const showMovies = async () => {
   loading.value = true
@@ -43,9 +44,13 @@ const addToWatchlist = async (movie) => {
     titel: movie.title
   }
   try {
-    await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist`, movieToSave)
+    await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist`, movieToSave);
+    showMessage.value = true; // Set showMessage to true when the button is clicked
+    setTimeout(() => {
+      showMessage.value = false; // Set showMessage to false after 2 seconds
+    }, 2000);
   } catch (err) {
-    console.error('Failed to add movie to watchlist:', err)
+    console.error('Failed to add movie to watchlist:', err);
   }
 }
 
@@ -61,13 +66,13 @@ onMounted(() => {
 }
 
 .movie-box {
-  position: relative; /* Added */
+  position: relative;
   margin: 10px;
   padding: 10px;
   border: 1px solid #ccc;
   width: 200px;
   text-align: center;
-  padding-bottom: 50px; /* Added */
+  padding-bottom: 50px;
 }
 
 .movie-box img {
@@ -86,9 +91,9 @@ onMounted(() => {
 }
 
 .add-button {
-  position: absolute; /* Added */
-  bottom: 5px; /* Added */
-  left: 50%; /* Added */
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
   transform: translateX(-50%);
   background-color: #8be8cb;
   border: none;
@@ -100,5 +105,16 @@ onMounted(() => {
   font-size: 20px;
   margin: 4px 2px;
   cursor: pointer;
+}
+
+.message {
+  position: fixed;
+  right: 10px;
+  top: 80px;
+  background-color: #8be8cb;
+  color: #303633;
+  padding: 10px;
+  text-align: center;
+  z-index: 1000;
 }
 </style>
