@@ -53,6 +53,7 @@ const toggleEditing = () => {
   <h3>Hinweis:</h3>
   <p>In der oberen rechten Ecke der Movieboxen ist eine Checkbox,</p>
   <p>mit der du den Film als gesehen markieren kannst.</p>
+  <p>Sobald die Checkbox wieder unchecked ist, ist der Film wieder in der Watchlist und du kannst ihn löschen.</p>
 
   <Watchlist/>
 </template>
