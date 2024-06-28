@@ -1,21 +1,27 @@
 <template>
   <h2>Deine Watchlist!</h2>
-  <div class="movies-container">
-    <div class="movie-box" v-for="movie in unwatchedMovies" :key="movie.filmId">
-      <h2>{{ movie.title }}</h2>
-      <img :src="movie.poster_path" alt="Movie poster">
-      <p>{{ movie.overview }}</p>
-      <input type="checkbox" class="watched-checkbox" @change="markAsWatched(movie)">
-      <button class="remove-button" @click="removeFromWatchlist(movie)">Entfernen</button>
-    </div>
+  <div v-if="watchlist.length === 0">
+    No movies in watchlist
   </div>
-  <h2 v-if="watchedMovies.length">Bereits angeschaut:</h2>
-  <div class="movies-container" v-if="watchedMovies.length"> <!-- Hier wurde die Klasse hinzugefügt -->
-    <div class="movie-box" v-for="movie in watchedMovies" :key="movie.id">
-      <h2>{{ movie.titel }}</h2>
-      <img :src="`${IMAGE_BASE_URL}${movie.poster_path}`" alt="Movie poster">
-      <p>{{ movie.overview }}</p>
-      <input type="checkbox" class="watched-checkbox" :checked="isMovieWatched(movie)" @change="toggleWatched(movie)">
+  <div v-else>
+    <div class="movies-container">
+      <div class="movie-box" v-for="movie in unwatchedMovies" :key="movie.filmId">
+        <h2>{{ movie.title }}</h2>
+        <img :src="movie.poster_path" alt="Movie poster">
+        <p>{{ movie.overview }}</p>
+        <input type="checkbox" class="watched-checkbox" @change="markAsWatched(movie)">
+        <button class="remove-button" @click="removeFromWatchlist(movie)">Entfernen</button>
+      </div>
+    </div>
+    <h2 v-if="watchedMovies.length">Bereits angeschaut:</h2>
+    <div class="movies-container" v-if="watchedMovies.length">
+      <div class="movie-box" v-for="movie in watchedMovies" :key="movie.id">
+        <h2>{{ movie.titel }}</h2>
+        <img :src="`${IMAGE_BASE_URL}${movie.poster_path}`" alt="Movie poster">
+        <p>{{ movie.overview }}</p>
+        <input type="checkbox" class="watched-checkbox" :checked="isMovieWatched(movie)"
+               @change="toggleWatched(movie)">
+      </div>
     </div>
   </div>
 </template>
@@ -23,7 +29,7 @@
 <script setup>
 import {ref, onMounted, computed} from 'vue'
 import axios from "axios";
-import { showMovies } from "@/services/apiService.js";
+import {showMovies} from "@/services/apiService.js";
 
 const watchlist = ref([]);
 const watchedMovies = ref([]);
@@ -57,7 +63,6 @@ const removeFromWatchlist = async (movie) => {
     const movieToRemove = watchlist.value.splice(index, 1)[0];
 
     try {
-      // Verwenden Sie movieToRemove.id anstelle von movie.filmId
       await axios.delete(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist/${movieToRemove.id}`);
     } catch (err) {
       console.error('Failed to remove movie from watchlist:', err);
@@ -92,7 +97,7 @@ const removeFromWatched = (movie) => {
   const index = watchedMovies.value.findIndex(watchedMovie => watchedMovie.filmId === movie.filmId);
   if (index !== -1) {
     watchedMovies.value.splice(index, 1);
-    // Überprüfen Sie, ob der Film bereits in der Watchlist ist, bevor Sie ihn hinzufügen
+
     if (!watchlist.value.some(w => w.filmId === movie.filmId)) {
       watchlist.value.push(movie);
     }
