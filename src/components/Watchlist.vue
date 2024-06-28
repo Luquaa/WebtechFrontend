@@ -11,6 +11,17 @@
         <p>{{ movie.overview }}</p>
         <input type="checkbox" class="watched-checkbox" @change="markAsWatched(movie)">
         <button class="remove-button" @click="removeFromWatchlist(movie)">Entfernen</button>
+        <input type="checkbox" v-model="showMoreInfo" /> Mehr Daten anzeigen
+        <div v-if="showMoreInfo">
+          <p>Veröffentlichungsdatum:</p>
+          <p>{{ movie.release_date }}</p>
+          <p>Durchschnittliche Bewertung:</p>
+          <p>{{ movie.vote_average }}</p>
+          <p>Anzahl der Bewertungen:</p>
+          <p>{{ movie.vote_count }}</p>
+          <p>Budget:</p>
+          <p>{{ movie.budget }}$</p>
+        </div>
       </div>
     </div>
   </div>
@@ -22,6 +33,17 @@
       <p>{{ movie.overview }}</p>
       <input type="checkbox" class="watched-checkbox" :checked="isMovieWatched(movie)"
              @change="toggleWatched(movie)">
+      <input type="checkbox" v-model="showMoreInfo" /> Mehr Daten anzeigen
+      <div v-if="showMoreInfo">
+        <p>Veröffentlichungsdatum:</p>
+        <p>{{ movie.release_date }}</p>
+        <p>Durchschnittliche Bewertung:</p>
+        <p>{{ movie.vote_average }}</p>
+        <p>Anzahl der Bewertungen:</p>
+        <p>{{ movie.vote_count }}</p>
+        <p>Budget:</p>
+        <p>{{ movie.budget }}$</p>
+      </div>
     </div>
   </div>
 </template>
@@ -34,6 +56,7 @@ import {showMovies} from "@/services/apiService.js";
 const watchlist = ref([]);
 const watchedMovies = ref([]);
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+const showMoreInfo = ref(false);
 
 // Abrufen der Watchlist-Daten beim Laden der Seite
 onMounted(async () => {
@@ -45,6 +68,10 @@ onMounted(async () => {
       movie.title = movieDetails.title;
       movie.poster_path = `${IMAGE_BASE_URL}${movieDetails.poster_path}`;
       movie.overview = movieDetails.overview;
+      movie.release_date = movieDetails.release_date;
+      movie.vote_average = movieDetails.vote_average;
+      movie.vote_count = movieDetails.vote_count;
+      movie.budget = movieDetails.budget;
     }
   } catch (error) {
     console.log(error);
