@@ -13,15 +13,15 @@
         <button class="remove-button" @click="removeFromWatchlist(movie)">Entfernen</button>
       </div>
     </div>
-    <h2 v-if="watchedMovies.length">Bereits angeschaut:</h2>
-    <div class="movies-container" v-if="watchedMovies.length">
-      <div class="movie-box" v-for="movie in watchedMovies" :key="movie.id">
-        <h2>{{ movie.titel }}</h2>
-        <img :src="`${IMAGE_BASE_URL}${movie.poster_path}`" alt="Movie poster">
-        <p>{{ movie.overview }}</p>
-        <input type="checkbox" class="watched-checkbox" :checked="isMovieWatched(movie)"
-               @change="toggleWatched(movie)">
-      </div>
+  </div>
+  <h2 v-if="watchedMovies.length">Bereits angeschaut:</h2>
+  <div class="movies-container" v-if="watchedMovies.length">
+    <div class="movie-box" v-for="movie in watchedMovies" :key="movie.id">
+      <h2>{{ movie.titel }}</h2>
+      <img :src="`${IMAGE_BASE_URL}${movie.poster_path}`" alt="Movie poster">
+      <p>{{ movie.overview }}</p>
+      <input type="checkbox" class="watched-checkbox" :checked="isMovieWatched(movie)"
+             @change="toggleWatched(movie)">
     </div>
   </div>
 </template>
