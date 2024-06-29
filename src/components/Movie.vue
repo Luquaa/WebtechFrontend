@@ -5,19 +5,24 @@
     <div v-else-if="error">{{ error }}</div>
     <div v-else class="movies-container">
       <div v-for="movie in movies" :key="movie.id" class="movie-box">
-        <img :src="movie.imageUrl" :alt="movie.title" />
+        <img :src="movie.imageUrl" :alt="movie.title"/>
         <h2>{{ movie.title }}</h2>
         <p>{{ movie.description }}</p>
         <button class="add-button" @click="addToWatchlist(movie)">Hinzufügen</button>
-        <p v-if="showMessage" class="message">Hinzugefügt!</p>
+        <div class="hinweis">
+          <p v-if="showMessage" class="message">Hinzugefügt!</p>
+          <h3>Hinweis:</h3>
+          <p>Auf dieser Seite werden nur die aktuellsten Filme angezeigt, wenn du einen speziellen
+            Film suchen möchtest probier die Searchbar aus!</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { fetchImages } from '../services/apiService'
+import {ref, onMounted} from 'vue'
+import {fetchImages} from '../services/apiService'
 import axios from 'axios'
 
 const movies = ref([])
@@ -45,9 +50,9 @@ const addToWatchlist = async (movie) => {
   }
   try {
     await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/watchlist`, movieToSave);
-    showMessage.value = true; // Set showMessage to true when the button is clicked
+    showMessage.value = true;
     setTimeout(() => {
-      showMessage.value = false; // Set showMessage to false after 2 seconds
+      showMessage.value = false;
     }, 2000);
   } catch (err) {
     console.error('Failed to add movie to watchlist:', err);
@@ -73,6 +78,8 @@ onMounted(() => {
   width: 200px;
   text-align: center;
   padding-bottom: 50px;
+  box-shadow: 0px 10px 20px rgba(48, 54, 51, 0.2);
+  border-radius: 3px;
 }
 
 .movie-box img {
@@ -88,6 +95,7 @@ onMounted(() => {
 .movie-box p {
   font-size: 14px;
   color: #555;
+  padding-bottom: 10px;
 }
 
 .add-button {
@@ -109,12 +117,22 @@ onMounted(() => {
 
 .message {
   position: fixed;
-  right: 10px;
-  top: 80px;
+  right: 35px;
+  top: 85px;
   background-color: #8be8cb;
   color: #303633;
   padding: 10px;
   text-align: center;
   z-index: 1000;
+}
+
+.hinweis {
+  position: fixed;
+  max-width: 150px;
+  right: 10px;
+  top: 120px;
+  background-color: #ebe4d4;
+  padding: 80px 0;
+  margin-top: 20px;
 }
 </style>

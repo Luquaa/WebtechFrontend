@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="header-left">
-      <h1>Watchlist.com</h1>
+      <h1>Build your Watchlist!</h1>
     </div>
     <div class="header-center">
       <nav>
@@ -21,17 +21,6 @@
 
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-
-const searchQuery = ref('');
-const router = useRouter();
-
-const handleSearch = () => {
-  if (searchQuery.value.trim()) {
-    router.push({ name: 'searchResults', query: { query: searchQuery.value } });
-  }
-};
 </script>
 
 <style scoped>
@@ -73,5 +62,14 @@ const handleSearch = () => {
 
 .button a {
   text-decoration: none;
+}
+
+.button:hover {
+  background-color: #303633;
+  color: #8be8cb;
+}
+
+h1 {
+  font-size: 30px;
 }
 </style>

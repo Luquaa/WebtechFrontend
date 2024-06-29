@@ -1,18 +1,48 @@
 <template>
-  <h2>Deine Watchlist!</h2>
-  <div v-if="watchlist.length === 0">
-    No movies in watchlist
+  <div class="info-checkbox-container">
+    <span>Möchtest du mehr Information zu den Film anzeigen?</span>
+    <input type="checkbox" v-model="showMoreInfo"/>
   </div>
-  <div v-else>
-    <div class="movies-container">
-      <div class="movie-box" v-for="movie in unwatchedMovies" :key="movie.filmId">
-        <h2>{{ movie.title }}</h2>
-        <img :src="movie.poster_path" alt="Movie poster">
+  <div class="fix">
+    <div v-if="watchlist.length === 0">
+      No movies in watchlist
+    </div>
+    <div v-else>
+      <div class="movies-container">
+        <div class="movie-box" v-for="movie in unwatchedMovies" :key="movie.filmId">
+          <img :src="movie.poster_path" alt="Movie poster">
+          <div class="title-and-checkbox">
+            <h2>{{ movie.title }}</h2>
+            <input type="checkbox" class="watched-checkbox" @change="markAsWatched(movie)">
+          </div>
+          <p>{{ movie.overview }}</p>
+          <button class="remove-button" @click="removeFromWatchlist(movie)">Entfernen</button>
+          <div v-if="showMoreInfo">
+            <h3>Mehr Informationen:</h3>
+            <p>Veröffentlichungsdatum:</p>
+            <p>{{ movie.release_date }}</p>
+            <p>Durchschnittliche Bewertung:</p>
+            <p>{{ movie.vote_average }}</p>
+            <p>Anzahl der Bewertungen:</p>
+            <p>{{ movie.vote_count }}</p>
+            <p>Budget:</p>
+            <p>{{ movie.budget }}$</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h2 v-if="watchedMovies.length">Bereits angeschaut:</h2>
+    <div class="movies-container" v-if="watchedMovies.length">
+      <div class="movie-box" v-for="movie in watchedMovies" :key="movie.id">
+        <img :src="`${IMAGE_BASE_URL}${movie.poster_path}`" alt="Movie poster">
+        <div class="title-and-checkbox">
+          <h2>{{ movie.titel }}</h2>
+          <input type="checkbox" class="watched-checkbox" :checked="isMovieWatched(movie)"
+                 @change="toggleWatched(movie)">
+        </div>
         <p>{{ movie.overview }}</p>
-        <input type="checkbox" class="watched-checkbox" @change="markAsWatched(movie)">
-        <button class="remove-button" @click="removeFromWatchlist(movie)">Entfernen</button>
-        <input type="checkbox" v-model="showMoreInfo" /> Mehr Daten anzeigen
         <div v-if="showMoreInfo">
+          <h3>Mehr Informationen:</h3>
           <p>Veröffentlichungsdatum:</p>
           <p>{{ movie.release_date }}</p>
           <p>Durchschnittliche Bewertung:</p>
@@ -22,27 +52,6 @@
           <p>Budget:</p>
           <p>{{ movie.budget }}$</p>
         </div>
-      </div>
-    </div>
-  </div>
-  <h2 v-if="watchedMovies.length">Bereits angeschaut:</h2>
-  <div class="movies-container" v-if="watchedMovies.length">
-    <div class="movie-box" v-for="movie in watchedMovies" :key="movie.id">
-      <h2>{{ movie.titel }}</h2>
-      <img :src="`${IMAGE_BASE_URL}${movie.poster_path}`" alt="Movie poster">
-      <p>{{ movie.overview }}</p>
-      <input type="checkbox" class="watched-checkbox" :checked="isMovieWatched(movie)"
-             @change="toggleWatched(movie)">
-      <input type="checkbox" v-model="showMoreInfo" /> Mehr Daten anzeigen
-      <div v-if="showMoreInfo">
-        <p>Veröffentlichungsdatum:</p>
-        <p>{{ movie.release_date }}</p>
-        <p>Durchschnittliche Bewertung:</p>
-        <p>{{ movie.vote_average }}</p>
-        <p>Anzahl der Bewertungen:</p>
-        <p>{{ movie.vote_count }}</p>
-        <p>Budget:</p>
-        <p>{{ movie.budget }}$</p>
       </div>
     </div>
   </div>
@@ -149,11 +158,14 @@ const removeFromWatched = (movie) => {
   width: 200px;
   text-align: center;
   padding-bottom: 50px;
+  box-shadow: 0px 10px 20px rgba(48, 54, 51, 0.2);
+  border-radius: 3px;
 }
 
 .movie-box img {
   max-width: 100%;
   height: auto;
+  padding: 10px;
 }
 
 .movie-box h2 {
@@ -164,6 +176,9 @@ const removeFromWatched = (movie) => {
 .movie-box p {
   font-size: 14px;
   color: #555;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
 }
 
 .remove-button {
@@ -189,7 +204,19 @@ const removeFromWatched = (movie) => {
   right: 0;
 }
 
+.info-checkbox-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
 h2 {
   margin-top: 20px;
+}
+
+.fix {
+  max-width: 1200px;
+  padding-left: 50px;
 }
 </style>
