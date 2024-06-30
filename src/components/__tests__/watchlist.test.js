@@ -33,7 +33,7 @@ describe('Watchlist', () => {
     it('should render message when no movies received from backend', async () => {
         vi.mocked(axios, true).get.mockResolvedValueOnce({data: emptyResponse})
 
-        const msg = 'No movies in watchlist'
+        const msg = 'Noch keine Filme in der Watchlist!'
         const wrapper = shallowMount(Watchlist)
 
         await flushPromises()
