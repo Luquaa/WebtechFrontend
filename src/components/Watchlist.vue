@@ -8,7 +8,7 @@
   </div>
   <div class="fix">
     <div v-if="watchlist.length === 0">
-      No movies in watchlist
+      Noch keine Filme in der Watchlist!
     </div>
     <div v-else>
       <div class="movies-container">
