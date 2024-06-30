@@ -4,6 +4,7 @@ Benedict Heidecker / Luka Kovacev
 Hier ist der Link zu unserem BackendRepository: https://github.com/Extn101/WebtechBackend/
 
 ## ACHTUNG: Eventuell müssen die Browsereinstellungen angepasst werden, damit das richtige Farbschema angezeigt wird.
+## Ebefalls sind die Error in der Terminalausgabe, bei den Tests, zu ignorieren, dies geschieht aufgrund der fehlenden Antwort des Backends/API, und sind zu erwarten.
 ## Wie benutzt man die WebApp?:
 
 ### Home: 
