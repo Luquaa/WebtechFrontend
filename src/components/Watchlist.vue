@@ -3,13 +3,16 @@
     <span>Möchtest du mehr Information zu den Film anzeigen?</span>
     <input type="checkbox" v-model="showMoreInfo"/>
   </div>
+  <div class="searchbar">
+    <input type="text" placeholder="Search Watchlist..." v-model="searchQuery" @keyup="filterWatchlist">
+  </div>
   <div class="fix">
     <div v-if="watchlist.length === 0">
       No movies in watchlist
     </div>
     <div v-else>
       <div class="movies-container">
-        <div class="movie-box" v-for="movie in unwatchedMovies" :key="movie.filmId">
+        <div class="movie-box" v-for="movie in filteredWatchlist" :key="movie.filmId">
           <img :src="movie.poster_path" alt="Movie poster">
           <div class="title-and-checkbox">
             <h2>{{ movie.title }}</h2>
@@ -19,14 +22,17 @@
           <button class="remove-button" @click="removeFromWatchlist(movie)">Entfernen</button>
           <div v-if="showMoreInfo">
             <h3>Mehr Informationen:</h3>
-            <p>Veröffentlichungsdatum:</p>
+            <p class="info-label">Veröffentlichungsdatum:</p>
             <p>{{ movie.release_date }}</p>
-            <p>Durchschnittliche Bewertung:</p>
+            <p class="info-label">Durchschnittliche Bewertung:</p>
             <p>{{ movie.vote_average }}</p>
-            <p>Anzahl der Bewertungen:</p>
+            <p class="info-label">Anzahl der Bewertungen:</p>
             <p>{{ movie.vote_count }}</p>
-            <p>Budget:</p>
-            <p>{{ movie.budget }}$</p>
+            <p class="info-label">Budget:</p>
+            <p v-if="movie.budget === 0">not available</p>
+            <p v-else>{{ movie.budget }}$</p>
+            <p class="info-label">Genre:</p>
+            <p>{{ movie.genre }}</p>
           </div>
         </div>
       </div>
@@ -43,14 +49,17 @@
         <p>{{ movie.overview }}</p>
         <div v-if="showMoreInfo">
           <h3>Mehr Informationen:</h3>
-          <p>Veröffentlichungsdatum:</p>
+          <p class="info-label">Veröffentlichungsdatum:</p>
           <p>{{ movie.release_date }}</p>
-          <p>Durchschnittliche Bewertung:</p>
+          <p class="info-label">Durchschnittliche Bewertung:</p>
           <p>{{ movie.vote_average }}</p>
-          <p>Anzahl der Bewertungen:</p>
+          <p class="info-label">Anzahl der Bewertungen:</p>
           <p>{{ movie.vote_count }}</p>
-          <p>Budget:</p>
-          <p>{{ movie.budget }}$</p>
+          <p class="info-label">Budget:</p>
+          <p v-if="movie.budget === 0">not available</p>
+          <p v-else>{{ movie.budget }}$</p>
+          <p class="info-label">Genre:</p>
+          <p>{{ movie.genre }}</p>
         </div>
       </div>
     </div>
@@ -58,7 +67,7 @@
 </template>
 
 <script setup>
-import {ref, onMounted, computed} from 'vue'
+import {ref, onMounted, computed, watch} from 'vue'
 import axios from "axios";
 import {showMovies} from "@/services/apiService.js";
 
@@ -66,6 +75,8 @@ const watchlist = ref([]);
 const watchedMovies = ref([]);
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 const showMoreInfo = ref(false);
+const searchQuery = ref('');
+const filteredWatchlist = ref([]);
 
 // Abrufen der Watchlist-Daten beim Laden der Seite
 onMounted(async () => {
@@ -81,6 +92,7 @@ onMounted(async () => {
       movie.vote_average = movieDetails.vote_average;
       movie.vote_count = movieDetails.vote_count;
       movie.budget = movieDetails.budget;
+      movie.genre = movieDetails.genres.map(genre => genre.name).join(', ');
     }
   } catch (error) {
     console.log(error);
@@ -140,6 +152,18 @@ const removeFromWatched = (movie) => {
     localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies.value));
   }
 };
+
+const filterWatchlist = () => {
+  if (searchQuery.value.trim()) {
+    filteredWatchlist.value = unwatchedMovies.value.filter(movie => movie.title.toLowerCase().includes(searchQuery.value.toLowerCase()));
+  } else {
+    filteredWatchlist.value = unwatchedMovies.value;
+  }
+};
+
+watch([unwatchedMovies], () => {
+  filterWatchlist();
+});
 </script>
 
 
@@ -218,5 +242,20 @@ h2 {
 .fix {
   max-width: 1200px;
   padding-left: 50px;
+}
+
+.info-label {
+  color: #8be8cb;
+  font-weight: bold;
+  background-color: #8be8cb;
+  box-shadow: 0px 10px 20px rgba(48, 54, 51, 0.2);
+  border-radius: 10px;
+}
+
+.searchbar {
+  box-shadow: 0px 10px 20px rgba(48, 54, 51, 0.2);
+  margin: 10px;
+  background-color: #8be8cb;
+  border-color: #8be8cb;
 }
 </style>

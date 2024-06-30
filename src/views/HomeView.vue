@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="header-right">
+    <div class="searchbar">
       <input type="text" placeholder="Search Movies..." v-model="searchQuery" @keyup.enter="handleSearch">
     </div>
     <div v-if="searchResults.length">
@@ -58,7 +58,7 @@ const addToWatchlist = async (movie) => {
 </script>
 
 <style scoped>
-.header-right {
+.searchbar {
   position: fixed;
   top: 5px;
   right: 0;
@@ -66,7 +66,7 @@ const addToWatchlist = async (movie) => {
   z-index: 999;
 }
 
-.header-right input {
+.searchbar input {
   background-color: #8be8cb;
   border-color: #8be8cb;
   padding: 10px;
